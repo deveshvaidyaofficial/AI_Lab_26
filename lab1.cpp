@@ -178,8 +178,30 @@ int main()
         i++;
     }
 
+    int source;
+
+    cout << "\nEnter source vertex: ";
+    cin >> source;
+
+    if (source < 0 || source >= n)
+    {
+        cout << "Invalid source vertex!\n";
+        delete[] Q;
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++)
+        visited[i] = 0;
+
     cout << "\nBreadth First Traversal:\n";
-    BFT(n);
+
+    BFS(source);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (visited[i] == 0)
+            BFS(i);
+    }
 
     delete[] Q;
 
