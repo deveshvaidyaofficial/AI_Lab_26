@@ -13,6 +13,8 @@ int visited[100];
 int *Q;
 int front = -1, rear = -1, maxSize;
 
+//---------------------- Queue Functions ----------------------//
+
 void createQueue(int size)
 {
     maxSize = size;
@@ -52,6 +54,8 @@ int dequeue()
     return Q[front++];
 }
 
+//---------------------- Graph Functions ----------------------//
+
 bool edgeExists(int u, int v)
 {
     Node *temp = adj[u];
@@ -79,6 +83,8 @@ void addEdge(int u, int v)
     newNode->next = adj[v];
     adj[v] = newNode;
 }
+
+//---------------------- BFS ----------------------//
 
 void BFS(int v)
 {
@@ -113,10 +119,12 @@ void BFS(int v)
     }
 }
 
-void BFT(int n)
+void BFT(int source, int n)
 {
     for (int i = 0; i < n; i++)
         visited[i] = 0;
+
+    BFS(source);
 
     for (int i = 0; i < n; i++)
     {
@@ -124,6 +132,41 @@ void BFT(int n)
             BFS(i);
     }
 }
+
+//---------------------- DFS ----------------------//
+
+void DFS(int v)
+{
+    visited[v] = 1;
+
+    cout << v << " ";
+
+    Node *temp = adj[v];
+
+    while (temp != NULL)
+    {
+        if (visited[temp->vertex] == 0)
+            DFS(temp->vertex);
+
+        temp = temp->next;
+    }
+}
+
+void DFT(int source, int n)
+{
+    for (int i = 0; i < n; i++)
+        visited[i] = 0;
+
+    DFS(source);
+
+    for (int i = 0; i < n; i++)
+    {
+        if (visited[i] == 0)
+            DFS(i);
+    }
+}
+
+//---------------------- Main ----------------------//
 
 int main()
 {
@@ -178,30 +221,68 @@ int main()
         i++;
     }
 
-    int source;
+    int choice;
 
-    cout << "\nEnter source vertex: ";
-    cin >> source;
-
-    if (source < 0 || source >= n)
+    do
     {
-        cout << "Invalid source vertex!\n";
-        delete[] Q;
-        return 1;
-    }
+        cout << "\n========== GRAPH MENU ==========\n";
+        cout << "1. Breadth First Traversal (BFS)\n";
+        cout << "2. Depth First Traversal (DFS)\n";
+        cout << "3. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
 
-    for (int i = 0; i < n; i++)
-        visited[i] = 0;
+        switch (choice)
+        {
+        case 1:
+        {
+            int source;
 
-    cout << "\nBreadth First Traversal:\n";
+            cout << "Enter source vertex: ";
+            cin >> source;
 
-    BFS(source);
+            if (source < 0 || source >= n)
+            {
+                cout << "Invalid source vertex!\n";
+                break;
+            }
 
-    for (int i = 0; i < n; i++)
-    {
-        if (visited[i] == 0)
-            BFS(i);
-    }
+            cout << "\nBreadth First Traversal:\n";
+            BFT(source, n);
+            cout << endl;
+
+            break;
+        }
+
+        case 2:
+        {
+            int source;
+
+            cout << "Enter source vertex: ";
+            cin >> source;
+
+            if (source < 0 || source >= n)
+            {
+                cout << "Invalid source vertex!\n";
+                break;
+            }
+
+            cout << "\nDepth First Traversal:\n";
+            DFT(source, n);
+            cout << endl;
+
+            break;
+        }
+
+        case 3:
+            cout << "Exiting...\n";
+            break;
+
+        default:
+            cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 3);
 
     delete[] Q;
 
